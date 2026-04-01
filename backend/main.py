@@ -227,6 +227,25 @@ async def calculate(inp: ManualInput, user=Depends(get_current_user)):
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+from fastapi import FastAPI
+
+app = FastAPI()
+
+# --- Your existing APIs ---
+# example:
+# @app.post("/analyze")
+# def analyze():
+#     ...
+
+# --- ADD THIS AT THE BOTTOM ---
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="assets")
+
+@app.get("/")
+def serve_frontend():
+    return FileResponse("frontend/dist/index.html")
 import os
 import uvicorn
 
